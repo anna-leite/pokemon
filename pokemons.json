@@ -1,0 +1,64 @@
+[
+    {"name": "Bulbizarre", "types": ["Plante", "Poison"], "evolution": "Herbizarre"},
+    {"name": "Herbizarre", "types": ["Plante", "Poison"], "evolution": "Florizarre"},
+    {"name": "Florizarre", "types": ["Plante", "Poison"]},
+    
+    {"name": "Salamèche", "types": ["Feu"], "evolution": "Reptincel"},
+    {"name": "Reptincel", "types": ["Feu"], "evolution": "Dracaufeu"},
+    {"name": "Dracaufeu", "types": ["Feu", "Vol"]},
+    
+    {"name": "Carapuce", "types": ["Eau"], "evolution": "Carabaffe"},
+    {"name": "Carabaffe", "types": ["Eau"], "evolution": "Tortank"},
+    {"name": "Tortank", "types": ["Eau"]},
+    
+    {"name": "Chenipan", "types": ["Insecte"], "evolution": "Chrysacier"},
+    {"name": "Chrysacier", "types": ["Insecte"], "evolution": "Papilusion"},
+    {"name": "Papilusion", "types": ["Insecte", "Vol"]},
+    
+    {"name": "Aspicot", "types": ["Insecte", "Poison"], "evolution": "Coconfort"},
+    {"name": "Coconfort", "types": ["Insecte", "Poison"], "evolution": "Dardargnan"},
+    {"name": "Dardargnan", "types": ["Insecte", "Poison"]},
+    
+    {"name": "Roucool", "types": ["Normal", "Vol"], "evolution": "Roucoups"},
+    {"name": "Roucoups", "types": ["Normal", "Vol"], "evolution": "Roucarnage"},
+    {"name": "Roucarnage", "types": ["Normal", "Vol"]},
+    
+    {"name": "Rattata", "types": ["Normal"], "evolution": "Rattatac"},
+    {"name": "Rattatac", "types": ["Normal"]},
+    
+    {"name": "Piafabec", "types": ["Normal", "Vol"], "evolution": "Rapasdepic"},
+    {"name": "Rapasdepic", "types": ["Normal", "Vol"]},
+    
+    {"name": "Abo", "types": ["Poison"], "evolution": "Arbok"},
+    {"name": "Arbok", "types": ["Poison"]},
+    
+    {"name": "Pikachu", "types": ["Électrique"], "evolution": "Raichu"},
+    {"name": "Raichu", "types": ["Électrique"]},
+    
+    {"name": "Sabelette", "types": ["Sol"], "evolution": "Sablaireau"},
+    {"name": "Sablaireau", "types": ["Sol"]},
+    
+    {"name": "Nidoran♀", "types": ["Poison"], "evolution": "Nidorina"},
+    {"name": "Nidorina", "types": ["Poison"], "evolution": "Nidoqueen"},
+    {"name": "Nidoqueen", "types": ["Poison", "Sol"]},
+    
+    {"name": "Nidoran♂", "types": ["Poison"], "evolution": "Nidorino"},
+    {"name": "Nidorino", "types": ["Poison"], "evolution": "Nidoking"},
+    {"name": "Nidoking", "types": ["Poison", "Sol"]},
+    
+    {"name": "Mélofée", "types": ["Fée"], "evolution": "Mélodelfe"},
+    {"name": "Mélodelfe", "types": ["Fée"]},
+    
+    {"name": "Goupix", "types": ["Feu"], "evolution": "Feunard"},
+    {"name": "Feunard", "types": ["Feu"]},
+    
+    {"name": "Rondoudou", "types": ["Normal", "Fée"], "evolution": "Grodoudou"},
+    {"name": "Grodoudou", "types": ["Normal", "Fée"]},
+    
+    {"name": "Nosferapti", "types": ["Poison", "Vol"], "evolution": "Nosferalto"},
+    {"name": "Nosferalto", "types": ["Poison", "Vol"]},
+    
+    {"name": "Mystherbe", "types": ["Plante", "Poison"], "evolution": "Ortide"},
+    {"name": "Ortide", "types": ["Plante", "Poison"], "evolution": "Rafflesia"},
+    {"name": "Rafflesia", "types": ["Plante", "Poison"]}
+]
