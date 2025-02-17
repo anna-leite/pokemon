@@ -18,9 +18,11 @@ class Pokemon:
     def is_alive(self):
         return self.__hp > 0 # boléen
     
-    def take_damage(self):
-        pass
-    
+    def take_damage(self, damage):
+        self.__hp -= damage
+        if self.__hp < 0:
+            self.__hp = 0
+          
     def level_up(self):
         if self.__level < 100:
             gain_level =  random.randint(1, 3)
@@ -37,6 +39,7 @@ class Pokemon:
     # rajouter une limite d'évolution dans le fichier json?
     # genre level_evolution = 30 et comparer le niveau automatiquement à chaque fin de match?
     def evolve(self):
+        # ATTENTION METTRE UN LIMITE DE LEVEL == quand est ce que le pokémon evolu!!
         if self.__evolution:
             # print(f"{self.__name} évolue en {self.__evolution}!")
             evolved_pokemon = self.get-pokemon_info(self.__evolution)
@@ -45,7 +48,7 @@ class Pokemon:
                 self.__types, self.__evolution = evolved_pokemon
                 self.__attack += random.randint(5, 15)
                 self.__defense += random.randint(5, 15)
-                self.hp += random.randint(10, 20)
+                self.__hp += random.randint(10, 20)
                 self.__speed = max(1, 100 - self.__defense + random.randint(-5, 5)) 
                 # print(f"Nouvelles statistiques - Attack: {self.__attack}, Defense: {self.__defense}, HP: {self.__hp}, Speed: {self.__speed}")
             else:
@@ -68,7 +71,7 @@ class Pokemon:
     def get_name(self):
         return self.__name
     
-    def get_type(self):
+    def get_types(self):
         return self.__type
     
     def get_level(self):
@@ -90,7 +93,7 @@ class Pokemon:
         return self.__evolution
     
     # Setters
-    def set_hp(self, hp):
-        self.__hp = hp
+    # def set_hp(self, hp):
+    #     self.__hp = hp
     
 
