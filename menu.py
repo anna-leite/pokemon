@@ -79,16 +79,16 @@ class MainMenu(Menu):
             if self.state == "Start":
                 self.cursor_rect.midtop = (self.quitx + self.offset, self.quity)
                 self.state = "Quit"
-            if self.state == "AddPokemon":
+            elif self.state == "AddPokemon":
                 self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
                 self.state = "Start"
-            if self.state == "Pokedex":
+            elif self.state == "Pokedex":
                 self.cursor_rect.midtop = (self.addpokemonx + self.offset, self.addpokemony)
                 self.state = "AddPokemon"
-            if self.state == "AddPlayer":
+            elif self.state == "AddPlayer":
                 self.cursor_rect.midtop = (self.pokedexx + self.offset, self.pokedexy)
                 self.state = "Pokedex"
-            if self.state == "Quit":
+            elif self.state == "Quit":
                 self.cursor_rect.midtop = (self.addplayerx + self.offset, self.addplayery)
                 self.state = "AddPlayer"
 
