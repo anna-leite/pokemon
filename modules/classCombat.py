@@ -1,9 +1,14 @@
+import json
+import random
 from modules.classPokemon import Pokemon
+from modules.classManagePokemons import managePokemon
 
-class Combat:  
-    def __init__(self, pokemon_player, pokemon_random):
-        self.pokemon_player = pokemon_player
-        self.pokemon_random = pokemon_random
+class Combat(Pokemon):  
+    def __init__(self, name_player):
+        super().__init__()
+        self.name_player = name_player
+        self.pokemon_player = self.pokemon_player()
+        self.pokemon_random = self.pokemon_random()
         self.type_multiplier = {
                 "acier": {"acier": 0.5, "dragon": 0.5, "fée": 0.5, "glace": 0.5, "insecte": 0.5, 
                         "normal": 0.5, "plante": 0.5, "psy": 0.5, "roche": 0.5, "vol": 0.5, 
@@ -61,8 +66,39 @@ class Combat:
                 "vol": {"combat": 0.5, "insecte": 0.5, "plante": 0.5, 
                         "sol": 0, "électrik": 2, "glace": 2, "roche": 2}
             }
-        
 
+    def pokemon_random(self):
+        """Calcule la moyenne des expériences de base des Pokémon disponibles et sélectionne un Pokémon au hasard selon le range."""
+        # 1. Calcul de la moyenne de l'expérience de base des Pokémon disponibles
+        fighting_pokemons = fighting_pokemons()
+        medium_level = sum(p.get_level() for p in fighting_pokemons) / len(fighting_pokemons)
+
+        # 2. Vérification du range de la moyenne
+        if 1 <= medium_level <= 91:
+            experience_range = (1, 91)
+        elif 91 < medium_level <= 201:
+            experience_range = (91, 201)
+        elif 201 < medium_level <= 351:
+            experience_range = (201, 351)
+
+        # 3. Charger les Pokémon du fichier pokédex.json qui ont une base_experience dans la plage
+        with open('pokédex.json', 'r') as f:
+                data = json.load(f)
+                pokedex_data = data.get("pokemon", [])
+        filtered_pokemons = [
+            pokemon for pokemon in pokedex_data
+            if experience_range[0] <= pokemon.get('base_experience', 0) <= experience_range[1]
+        ]
+
+        # 5. Sélectionner un Pokémon au hasard
+        random_pokemon_data = random.choice(filtered_pokemons)
+        random_pokemon = Pokemon(random_pokemon_data['name'])  # Crée un objet Pokémon à partir des données du fichier
+
+        return random_pokemon
+
+
+    def pokemon_player(self, ):
+        pass # choisir entre les trois pékemon avalable
 
     def attacks_first(self):
         if self.pokemon_player.get_speed() > self.pokemon_random.get_speed():
@@ -101,6 +137,7 @@ class Combat:
         if winner == self.pokemon_player:
             winner.level_up()
             winner.evolve()
+            # ajoute le pokémon perdant à la pokéball
             
     
 

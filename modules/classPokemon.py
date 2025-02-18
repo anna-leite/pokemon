@@ -4,12 +4,14 @@ import  random
 class Pokemon:
     def __init__(self, name):
         self.__name = name
-        self.__type, self.__evolution = self.get_pokemon_info(name) # types et evolution sont récupéré à partir de json
-        self.__level = random.randint(1, 10) # niveau aléatoire entre 1 et 10
-        self.__hp = random.randint(1, 10) * self.__level # génère une attaque aléatoire basée sur le niveau
-        self.__attack = random.randint(1, 10) * self.__level
-        self.__defense = random.randint(1, 10) * self.__level
-        self.__speed = max(1, 100 - self.__defence + random.randint(-5, 5)) # vitesse calculée en fonction de la défense, max() garantit que la valeur minimal de la vitesse est 1.
+        self.__types = self.get_pokemon_info(name, "types") 
+        self.__evolution = self.get_pokemon_info(name, "evolution")  
+        self.__level = random.randint(5, 20) 
+        self.__hp = self.get_pokemon_info(name, "hp")  
+        self.__attack = self.get_pokemon_info(name, "attack") 
+        self.__defense = self.get_pokemon_info(name, "defense") 
+        self.__speed = self.get_pokemon_info(name, "speed") 
+        self.__available = False
 
 
     def __str__(self):
@@ -24,48 +26,61 @@ class Pokemon:
             self.__hp = 0
           
     def level_up(self):
-        if self.__level < 100:
-            gain_level =  random.randint(1, 3)
-            self.__level += gain_level
-            self.__attack += random.randint(1, 5) +  gain_level  # Augmente l'attaque de manière aléatoire
-            self.__defense += random.randint(1, 5) + gain_level  # Augmente la défense de manière aléatoire
-            self.__hp += random.randint(5, 10) + gain_level # Augmente les points de vie de manière aléatoire
-            self.__speed = random.randint(1, 5) + gain_level # Augmante la vitesse de manière aléatoire
-        #     print(f"{self.__name} a gagné un niveau! Nouveau niveau: {self.__level}")
-        #     print(f"Nouvelles statistiques - Attack: {self.__attack}, Defense: {self.__defense}, HP: {self.__hp}, Speed: {self.__speed}")
-        # else:
-        #     print(f"{self.__name} a atteint le niveau maximum!")
+        gain_level =  random.randint(1, 3)
+        self.__level += gain_level
+        self.__attack += random.randint(0, 3) +  gain_level  # Augmente de manière aléatoire
+        self.__defense += random.randint(0, 3) + gain_level  
+        self.__hp += random.randint(0, 3) + gain_level 
+        self.__speed = random.randint(0, 3) + gain_level 
 
-    # rajouter une limite d'évolution dans le fichier json?
-    # genre level_evolution = 30 et comparer le niveau automatiquement à chaque fin de match?
+
     def evolve(self):
-        # ATTENTION METTRE UN LIMITE DE LEVEL == quand est ce que le pokémon evolu!!
-        if self.__evolution:
-            # print(f"{self.__name} évolue en {self.__evolution}!")
-            evolved_pokemon = self.get-pokemon_info(self.__evolution)
-            if evolved_pokemon:
+        if self.__level >= self.get_pokemon_info(self.__name, "base_experience"):
+            if self.__evolution:
                 self.__name = self.__evolution
-                self.__types, self.__evolution = evolved_pokemon
-                self.__attack += random.randint(5, 15)
-                self.__defense += random.randint(5, 15)
-                self.__hp += random.randint(10, 20)
-                self.__speed = max(1, 100 - self.__defense + random.randint(-5, 5)) 
-                # print(f"Nouvelles statistiques - Attack: {self.__attack}, Defense: {self.__defense}, HP: {self.__hp}, Speed: {self.__speed}")
-            else:
-                print(f"Erreur: {self.__evolution} non trouvé dans le fichier pokemon.json.")
-        else: 
-            print(f"{self.__name} ne peut pas évoluer davantage.")
+                self.__types = self.get_pokemon_info(self.__name, "types")
+                self.__evolution = self.get_pokemon_info(self.__name,"evolution")
+                self.__attack = self.get_pokemon_info(self.__name,"attack")
+                self.__defense = self.get_pokemon_info(self.__name,"defense")
+                self.__hp = self.get_pokemon_info(self.__name,"hp")
+                self.__speed = self.get_pokemon_info(self.__name,"speed")
+            else: 
+                print(f"{self.__name} ne peut pas évoluer davantage.")
 
-    def get_pokemon_info(self, name):
+
+    def get_pokemon_info(self, name, info):
         try:
-            with open('pokemon.json', 'r') as f :
-                pokemon_data = json.load(f)
+            with open('pokedex.json', 'r') as f :
+                data = json.load(f)
+                pokemon_data = data.get("pokemon", [])
+
                 for pokemon in pokemon_data:
-                    if pokemon['name'] == name:
-                        return pokemon['types'], pokemon.get('evolution', None)
+                    if pokemon['name'].lower() == name.lower():
+                        return pokemon.get(info, None)
         except FileNotFoundError:
-            print("Fichier pokemon.json non trouvé.")
-        return[], None
+            print("Fichier pokedex.json non trouvé.")
+        except json.JSONDecodeError:
+            print("Erreur lors du chargement du fichier JSON")
+
+        print("Le Pokémon n'existe pas.")
+
+    def to_dict(self):
+        return {
+            "name": self.__name,
+            "types": self.__types,
+            "level": self.__level,
+            "hp": self.__hp,
+            "attack": self.__attack,
+            "defense": self.__defense,
+            "speed": self.__speed,
+            "evolution": self.__evolution,
+            "available": self.__available
+        }
+    
+
+    def set_available(self):
+        self.__available = not self.__available
+
 
     # Getters :
     def get_name(self):
@@ -91,9 +106,10 @@ class Pokemon:
     
     def get_evolution(self):
         return self.__evolution
+
+    def get_available(self):
+        return self.__available
     
-    # Setters
-    # def set_hp(self, hp):
-    #     self.__hp = hp
+
     
 
