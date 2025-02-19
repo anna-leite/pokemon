@@ -12,7 +12,7 @@ pygame.init()
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 FPS = 60
-FONT = "Assets/Fonts/Oxanium-Regular.ttf"
+FONT_PATH = "Assets/Fonts/Oxanium-Regular.ttf"
 
 COLOURS = {
     "BLACK": (0, 0, 0),
@@ -22,7 +22,8 @@ COLOURS = {
     "GREEN": (107, 220, 69),
     "LIGHT_GREY": (200, 200, 200, 10)
 }
-POKEAPI_URL = "https://pokeapi.co/api/v2/pokemon/"
+
+# POKEAPI_URL = "https://pokeapi.co/api/v2/pokemon/"
 
 
 def get_font_size(screen_width):
@@ -80,7 +81,7 @@ class Game:
                         self.state = "pokedex"
                     elif event.key == pygame.K_3:  # Go to Battle screens
                         self.state == "pre-battle"   
-                elif self.state == "pre-battle"
+                elif self.state == "pre-battle":
                     if event.key in [pygame.K_1, pygame.K_2, pygame.K_3]:  # Assuming 3 Pokémon
                         index = event.key - pygame.K_1  # Convert key to index (0, 1, 2)
                         if 0 <= index < len(self.player_pokemon):
@@ -123,10 +124,11 @@ class Game:
         pygame.display.flip()
 
     def draw_welcome(self):
-        font = pygame.font.Font(None, 74)
+        font = pygame.font.Font(FONT_PATH, 74)
         text = font.render("Welcome to Pokemon Battle!", True, BLACK)
         self.screen.blit(text, (100, 100))
         # Add input for player name here
+        # Morgane to complete
 
     def draw_menu(self):
         font = pygame.font.Font(None, 74)
@@ -175,22 +177,28 @@ class Game:
         self.screen.blit(back_text, (100, SCREEN_HEIGHT - 50))
 
     def draw_pre_battle(self):
-        font = pygame.font.Font(None, 36)
-        title = font.render("Select Your Pokémon", True, BLACK)
+        font = pygame.font.Font(FONT_PATH, 36)
+        background_image = "Assets/Images/Backgrounds/forest.png"
+        pokemon_image_path = f"Assets/Images/Pokemon/{random_pokemon_name}_front.png"
+        
+        # Draw background
+        screen.blit(background_image, (0, 0))
+        # A random pokemon appears
+        title = font.render(f"A {random_pokemon} has appeared", True, COLOURS['BLACK'])
         self.screen.blit(title, (100, 50))
+        # draw pokemon using image
+        screen.blit(pokemon_image_path, (100, 100))
         
         # Display player's Pokémon to choose from
+        
         for i, pokemon in enumerate(self.player_pokemon):
-            pokemon_text = font.render(f"{i + 1}. {pokemon['name']}", True, BLACK)
+            pokemon_text = font.render(f"{i + 1}. {pokemon['name']}", True, COLOURS['BLACK'])
             self.screen.blit(pokemon_text, (100, 100 + i * 30))
         
         # Instructions to select a Pokémon
-        instructions = font.render("Press 1, 2, or 3 to select a Pokémon", True, BLACK)
+        instructions = font.render("Choose a Pokémon to fight", True, COLOURS['BLACK'])
         self.screen.blit(instructions, (100, SCREEN_HEIGHT - 100))
         
-        # Instructions to go back
-        back_text = font.render("Press ESC to go back", True, BLACK)
-        self.screen.blit(back_text, (100, SCREEN_HEIGHT - 50))
 
     def draw_battle(self):
         font = pygame.font.Font(None, 36)
