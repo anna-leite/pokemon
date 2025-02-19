@@ -12,7 +12,7 @@ pygame.init()
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 FPS = 60
-FONT = "oxanium/Oxanium-Regular.ttf"
+FONT = "Assets/Fonts/Oxanium-Regular.ttf"
 
 COLOURS = {
     "BLACK": (0, 0, 0),

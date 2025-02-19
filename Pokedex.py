@@ -6,7 +6,7 @@ import pygame
 # Constants
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-FONT = "oxanium/Oxanium-Regular.ttf"
+FONT = "Assets/Fonts/Oxanium-Regular.ttf"
 BLACK = (0, 0, 0)
 DARK_GREY = (68, 68, 68)
 WHITE = (255, 255, 255)
@@ -126,7 +126,7 @@ window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Pokédex")
 
 try:
-    pokedex_image = pygame.image.load("./img/pokedexm.png").convert_alpha()
+    pokedex_image = pygame.image.load("Assets/Images/Pokedex/pokedex.png").convert_alpha()
 except Exception as e:
     print("Could not load pokedex image:", e)
     pokedex_image = pygame.Surface((300, 300))
