@@ -91,6 +91,8 @@ class Combat():
             if experience_range[0] <= pokemon.get('base_experience', 0) <= experience_range[1]
         ]
 
+        # comparer avec self.pokemon_list pour supprimer les pokemoons deja rencontrer de filtered_pokemons
+
         # 5. Sélectionner un Pokémon au hasard
         random_pokemon_data = random.choice(filtered_pokemons)
         random_pokemon = Pokemon(random_pokemon_data['name'])  # Crée un objet Pokémon à partir des données du fichier

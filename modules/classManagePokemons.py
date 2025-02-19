@@ -32,7 +32,7 @@ class managePokemon():
         """Sauvegarde la liste des Pokémon dans le fichier JSON."""
         try:
             with open(self.file_path, "w") as f:
-                json.dump([p.to_dict() for p in self.pokemon_list], f, indent=4)
+                json.dump([p.stats_pokemon_to_dict() for p in self.pokemon_list], f, indent=4)
         except IOError:
             print(f"Erreur : Impossible d'écrire dans le fichier {self.file_path}.")
 
@@ -58,10 +58,12 @@ class managePokemon():
 
 
     def update_pokemon(self, updated_pokemon):
-        """Met à jour un Pokémon dans l'équipe."""
+        """Met à jour un Pokémon en priorité si l'ID et le nom correspondent, sinon par ID uniquement."""
         for i, p in enumerate(self.pokemon_list):
-            if p.get_name() == updated_pokemon.get_name():
-                self.pokemon_list[i] = updated_pokemon
+            if p.get_id() == updated_pokemon.get_id():
+                if p.get_name() == updated_pokemon.get_name():
+                    self.pokemon_list[i] = updated_pokemon
+                else : self.pokemon_list[i] = updated_pokemon
         self.save_pokemon()
 
 

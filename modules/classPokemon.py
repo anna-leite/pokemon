@@ -4,6 +4,7 @@ import  random
 class Pokemon:
     def __init__(self, name):
         self.__name = name
+        self.__id = self.get_pokemon_info(name, "id")
         self.__types = self.get_pokemon_info(name, "types") 
         self.__evolution = self.get_pokemon_info(name, "evolution")  
         self.__level = random.randint(5, 20) 
@@ -64,7 +65,7 @@ class Pokemon:
 
         print("Le Pokémon n'existe pas.")
 
-    def to_dict(self):
+    def stats_pokemon_to_dict(self):
         return {
             "name": self.__name,
             "types": self.__types,
@@ -85,6 +86,9 @@ class Pokemon:
     # Getters :
     def get_name(self):
         return self.__name
+    
+    def get_id(self):
+        return self.__id
     
     def get_types(self):
         return self.__types
