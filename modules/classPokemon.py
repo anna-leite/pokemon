@@ -115,5 +115,49 @@ class Pokemon:
         return self.__available
     
 
+
+
+# import json
+# import os
+
+# def test_pokedex_access():
+#     pokedex_path = 'pokemon/pokedex.json'
+    
+#     # Vérifie si le fichier existe
+#     if not os.path.exists(pokedex_path):
+#         print("❌ Erreur : Le fichier pokedex.json est introuvable.")
+#         return
+    
+#     # Vérifie si le fichier est lisible et bien formaté
+#     try:
+#         with open(pokedex_path, 'r', encoding='utf-8') as f:
+#             data = json.load(f)
+            
+#             if "pokemon" not in data:
+#                 print("❌ Erreur : Le fichier JSON ne contient pas la clé 'pokemon'.")
+#                 return
+            
+#             if not isinstance(data["pokemon"], list) or len(data["pokemon"]) == 0:
+#                 print("❌ Erreur : La liste des Pokémon est vide ou mal formatée.")
+#                 return
+            
+#             # Vérifie qu'au moins un Pokémon possède les champs nécessaires
+#             sample_pokemon = data["pokemon"][0]
+#             required_fields = {"name", "id", "types", "hp", "attack", "defense", "speed", "evolution"}
+            
+#             if not required_fields.issubset(sample_pokemon.keys()):
+#                 print(f"❌ Erreur : Le Pokémon testé ne contient pas tous les champs requis. Champs manquants : {required_fields - set(sample_pokemon.keys())}")
+#                 return
+            
+#             print("✅ Succès : Le fichier pokedex.json est valide et bien formaté.")
+
+#     except json.JSONDecodeError:
+#         print("❌ Erreur : Le fichier JSON est corrompu ou mal formaté.")
+
+# # Exécution du test
+# test_pokedex_access()
+
+    
+
     
 
