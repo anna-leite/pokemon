@@ -1,76 +1,77 @@
 import json
 import random
-from modules.classPokemon import Pokemon
-from modules.classManagePokemons import managePokemon
+from classPokemon import Pokemon
+from classManagePokemons import managePokemon
 
-class Combat(Pokemon):  
+class Combat():  
     def __init__(self, name_player):
-        super().__init__()
+        # super().__init__()
         self.name_player = name_player
         self.pokemon_player = self.pokemon_player()
         self.pokemon_random = self.pokemon_random()
         self.type_multiplier = {
-                "acier": {"acier": 0.5, "dragon": 0.5, "fée": 0.5, "glace": 0.5, "insecte": 0.5, 
-                        "normal": 0.5, "plante": 0.5, "psy": 0.5, "roche": 0.5, "vol": 0.5, 
-                        "poison": 0, "combat": 2, "feu": 2, "sol": 2},
+    "steel": {"steel": 0.5, "dragon": 0.5, "fairy": 0.5, "ice": 0.5, "bug": 0.5, 
+              "normal": 0.5, "grass": 0.5, "psychic": 0.5, "rock": 0.5, "flying": 0.5, 
+              "poison": 0, "fighting": 2, "fire": 2, "ground": 2},
 
-                "combat": {"insecte": 0.5, "roche": 0.5, "ténèbre": 0.5, 
-                        "fée": 2, "psy": 2, "vol": 2},
+    "fighting": {"bug": 0.5, "rock": 0.5, "dark": 0.5, 
+                 "fairy": 2, "psychic": 2, "flying": 2},
 
-                "dragon": {"eau": 0.5, "électrik": 0.5, "feu": 0.5, "plante": 0.5, 
-                        "dragon": 2, "fée": 2, "glace": 2},
+    "dragon": {"water": 0.5, "electric": 0.5, "fire": 0.5, "grass": 0.5, 
+               "dragon": 2, "fairy": 2, "ice": 2},
 
-                "eau": {"acier": 0.5, "eau": 0.5, "feu": 0.5, "glace": 0.5, 
-                        "électrik": 2, "plante": 2},
+    "water": {"steel": 0.5, "water": 0.5, "fire": 0.5, "ice": 0.5, 
+              "electric": 2, "grass": 2},
 
-                "électrik": {"acier": 0.5, "électrik": 0.5, "vol": 0.5, 
-                            "sol": 2},
+    "electric": {"steel": 0.5, "electric": 0.5, "flying": 0.5, 
+                 "ground": 2},
 
-                "fée": {"combat": 0.5, "insecte": 0.5, "ténèbre": 0.5, 
-                        "dragon": 0, "acier": 2, "poison": 2},
+    "fairy": {"fighting": 0.5, "bug": 0.5, "dark": 0.5, 
+              "dragon": 0, "steel": 2, "poison": 2},
 
-                "feu": {"acier": 0.5, "fée": 0.5, "feu": 0.5, "glace": 0.5, "insecte": 0.5, "plante": 0.5, 
-                        "eau": 2, "roche": 2, "sol": 2},
+    "fire": {"steel": 0.5, "fairy": 0.5, "fire": 0.5, "ice": 0.5, "bug": 0.5, "grass": 0.5, 
+             "water": 2, "rock": 2, "ground": 2},
 
-                "glace": {"glace": 0.5, 
-                        "acier": 2, "combat": 2, "feu": 2, "roche": 2},
+    "ice": {"ice": 0.5, 
+            "steel": 2, "fighting": 2, "fire": 2, "rock": 2},
 
-                "insecte": {"combat": 0.5, "plante": 0.5, "sol": 0.5, 
-                            "feu": 2, "roche": 2, "vol": 2},
+    "bug": {"fighting": 0.5, "grass": 0.5, "ground": 0.5, 
+             "fire": 2, "rock": 2, "flying": 2},
 
-                "normal": {"spectre": 0, 
-                        "combat": 2},
+    "normal": {"ghost": 0, 
+               "fighting": 2},
 
-                "plante": {"eau": 0.5, "électrik": 0.5, "plante": 0.5, "sol": 0.5, 
-                        "feu": 2, "glace": 2, "insecte": 2, "poison": 2, "vol": 2},
+    "grass": {"water": 0.5, "electric": 0.5, "grass": 0.5, "ground": 0.5, 
+              "fire": 2, "ice": 2, "bug": 2, "poison": 2, "flying": 2},
 
-                "poison": {"combat": 0.5, "fée": 0.5, "insecte": 0.5, "plante": 0.5, "poison": 0.5, 
-                        "psy": 2, "sol": 2},
+    "poison": {"fighting": 0.5, "fairy": 0.5, "bug": 0.5, "grass": 0.5, "poison": 0.5, 
+               "psychic": 2, "ground": 2},
 
-                "psy": {"combat": 0.5, "psy": 0.5, 
-                        "insecte": 2, "spectre": 2, "ténèbre": 2},
+    "psychic": {"fighting": 0.5, "psychic": 0.5, 
+                "bug": 2, "ghost": 2, "dark": 2},
 
-                "roche": {"feu": 0.5, "normal": 0.5, "poison": 0.5, "vol": 0.5, 
-                        "acier": 2, "combat": 2, "eau": 2, "plante": 2, "sol": 2},
+    "rock": {"fire": 0.5, "normal": 0.5, "poison": 0.5, "flying": 0.5, 
+             "steel": 2, "fighting": 2, "water": 2, "grass": 2, "ground": 2},
 
-                "sol": {"poison": 0.5, "roche": 0.5, 
-                        "électrik": 0, "eau": 2, "glace": 2, "plante": 2},
+    "ground": {"poison": 0.5, "rock": 0.5, 
+               "electric": 0, "water": 2, "ice": 2, "grass": 2},
 
-                "spectre": {"insecte": 0.5, "poison": 0.5, 
-                            "combat": 0, "normal": 0, 
-                            "spectre": 2, "ténèbre": 2},
+    "ghost": {"bug": 0.5, "poison": 0.5, 
+              "fighting": 0, "normal": 0, 
+              "ghost": 2, "dark": 2},
 
-                "ténèbre": {"spectre": 0.5, "ténèbre": 0.5, 
-                            "psy": 0, "combat": 2, "fée": 2, "insecte": 2},
+    "dark": {"ghost": 0.5, "dark": 0.5, 
+             "psychic": 0, "fighting": 2, "fairy": 2, "bug": 2},
 
-                "vol": {"combat": 0.5, "insecte": 0.5, "plante": 0.5, 
-                        "sol": 0, "électrik": 2, "glace": 2, "roche": 2}
-            }
+    "flying": {"fighting": 0.5, "bug": 0.5, "grass": 0.5, 
+               "ground": 0, "electric": 2, "ice": 2, "rock": 2}
+}
+
 
     def pokemon_random(self):
         """Calcule la moyenne des expériences de base des Pokémon disponibles et sélectionne un Pokémon au hasard selon le range."""
         # 1. Calcul de la moyenne de l'expérience de base des Pokémon disponibles
-        fighting_pokemons = fighting_pokemons()
+        fighting_pokemons = managePokemon(self.name_player).fighting_pokemons()
         medium_level = sum(p.get_level() for p in fighting_pokemons) / len(fighting_pokemons)
 
         # 2. Vérification du range de la moyenne
@@ -133,11 +134,10 @@ class Combat(Pokemon):
                 break
             self.perform_attack(defender, attacker)
         winner = self.pokemon_player if self.pokemon_player.is_alive() else self.pokemon_random
-        # ATTENTION DE BIEN RETOURNER LES VARIABLES POUR LEILA
         if winner == self.pokemon_player:
             winner.level_up()
             winner.evolve()
-            # ajoute le pokémon perdant à la pokéball
+            managePokemon(self.name_player).add_pokemon(self.pokemon_random)
             
     
 

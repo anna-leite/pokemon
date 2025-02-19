@@ -1,10 +1,10 @@
 import json
 import os
-from modules.classPokemon import Pokemon
+from classPokemon import Pokemon
 
-class managePokemon(Pokemon):
+class managePokemon():
     def __init__(self, player_name):
-        super().__init__()
+        # super().__init__()
         self.player_name = player_name
         self.file_path = f"{player_name}_pokeball.json"
         self.pokemon_list = self.load_pokemon()
@@ -25,7 +25,7 @@ class managePokemon(Pokemon):
 
     def create_default_team(self):
         """Crée une équipe de Pokémon par défaut et sauvegarde dans un fichier."""
-        self.pokemon_list = [Pokemon("pikachu"), Pokemon("bulbasaur"), Pokemon("squirtle")]
+        self.pokemon_list = [Pokemon("pikachu").set_available(), Pokemon("bulbasaur").set_available(), Pokemon("squirtle").set_available()]
         self.save_pokemon()
 
     def save_pokemon(self):
@@ -74,22 +74,22 @@ class managePokemon(Pokemon):
         """Met à jour la disponibilité d'un Pokémon."""
         available_count = sum(1 for p in self.pokemon_list if p.get_available())
 
-        if available:
-            if available_count <3:
-                for p in self.pokemon_list:
-                    if p.get_name() == pokemon_name:
-                        p.set_available()
-                        self.save_pokemon()
-                        return
-            else:
-                print("Erreur : Il y a déjà 3 Pokémon disponibles. Impossible de rendre un autre Pokémon disponible.")
+        for p in self.pokemon_list:
+            if p.get_name() == pokemon_name:
+                if available:
+                    if available_count < 3:
+                        if not p.get_available():
+                            p.set_available()
+                            self.save_pokemon()
+                        
+                    else:
+                        print("Erreur : Il y a déjà 3 Pokémon disponibles. Impossible de rendre un autre Pokémon disponible.")
 
-        else:
-            for p in self.pokemon_list:
-                if p.get_name() == pokemon_name:
-                    p.set_available()  # Inverse l'état de 'available' (False)
-                    self.save_pokemon()
-                    return
+                else:
+                    if p.get_available():
+                        p.set_available()  # Inverse l'état de 'available' (False)
+                        self.save_pokemon()
+                return
                 
     def fighting_pokemons(self):
         """Retourne une liste des Pokémon disponibles pour le combat."""

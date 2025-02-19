@@ -50,7 +50,7 @@ class Pokemon:
 
     def get_pokemon_info(self, name, info):
         try:
-            with open('pokedex.json', 'r') as f :
+            with open('pokemon/pokedex.json', 'r') as f :
                 data = json.load(f)
                 pokemon_data = data.get("pokemon", [])
 
@@ -58,7 +58,7 @@ class Pokemon:
                     if pokemon['name'].lower() == name.lower():
                         return pokemon.get(info, None)
         except FileNotFoundError:
-            print("Fichier pokedex.json non trouvé.")
+            print("pokedex.json non trouvé.")
         except json.JSONDecodeError:
             print("Erreur lors du chargement du fichier JSON")
 
@@ -87,7 +87,7 @@ class Pokemon:
         return self.__name
     
     def get_types(self):
-        return self.__type
+        return self.__types
     
     def get_level(self):
         return self.__level
@@ -101,8 +101,8 @@ class Pokemon:
     def get_attack(self):
         return self.__attack
     
-    def get_defence(self):
-        return self.__defence
+    def get_defense(self):
+        return self.__defense
     
     def get_evolution(self):
         return self.__evolution
