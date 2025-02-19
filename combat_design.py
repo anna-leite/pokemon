@@ -1,20 +1,13 @@
 import pygame
 import sys
 
-# Initialize Pygame
-pygame.init()
-
-pokemon = "squirtle"
-damage = "damage"
-defense = "defense"
-level = "level"
 # Constants
-WIDTH = 800
-HEIGHT = 600
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 FPS = 60
 MAX_HEALTH = 100
-FONT_PATH = "oxanium/Oxanium-Regular.ttf"
-COLORS = {
+FONT_PATH = "Assets/Fonts/Oxanium-Regular.ttf"
+COLOURS = {
     "BLACK": (0, 0, 0),
     "DARK_GREY": (68, 68, 68),
     "WHITE": (255, 255, 255),
@@ -23,16 +16,24 @@ COLORS = {
     "LIGHT_GREY": (200, 200, 200, 10)
 }
 TEXT = {
-    "NEW_OPPONENT": f"a wild {pokemon} has appeared",
-    "SELECT": "Choose one of your pokemon to fight",
     "ATTACK": f"your attack does {damage} damage",
     "DEFENSE": f"you defend with {defense}, you take {damage} damage",
-    "WIN": f"you win! You level increased to {level}",
-    "LOSE": f"{pokemon} is dead, you have an empty pokemon slot",
 }
 
+FONT_SIZE = 28
+BOX_PADDING = 5
+
+# Initialize Pygame
+pygame.init()
+
+player_pokemon = ""
+random_pokemon = ""
+damage = "damage"
+defense = "defense"
+level = "level"
+
 # Set up the display
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Combat")
 
 # Health variables
@@ -52,16 +53,16 @@ def draw_health_bar(surface, x, y, health, max_health, name, level, bar_length):
 
     # Calculate dimensions for the background rectangle
     background_rect = (x - 10, y - 40, bar_length + 20, 70)  # Adjusted for padding
-    draw_rounded_rect(surface, COLORS["LIGHT_GREY"], background_rect, 10)
+    draw_rounded_rect(surface, COLOURS["LIGHT_GREY"], background_rect, 10)
 
     # Draw the health bar background and current health
-    draw_rounded_rect(surface, COLORS["RED"], (x, y, bar_length, 20), 10)
-    draw_rounded_rect(surface, COLORS["GREEN"], (x, y, current_length, 20), 10)
+    draw_rounded_rect(surface, COLOURS["RED"], (x, y, bar_length, 20), 10)
+    draw_rounded_rect(surface, COLOURS["GREEN"], (x, y, current_length, 20), 10)
 
     # Draw name and level
     font = pygame.font.Font(FONT_PATH, 24)
-    name_surface = font.render(name, True, COLORS["BLACK"])
-    level_surface = font.render(f"Level: {level}", True, COLORS["BLACK"])
+    name_surface = font.render(name, True, COLOURS["BLACK"])
+    level_surface = font.render(f"Level: {level}", True, COLOURS["BLACK"])
     surface.blit(name_surface, (x, y - 30))  # Name above the bar
     surface.blit(level_surface, (x + bar_length - level_surface.get_width(), y + 25)) 
     
@@ -87,7 +88,7 @@ def load_image(path, size):
 
 # Main game loop
 clock = pygame.time.Clock()
-background_image = load_image("Backgrounds/forest.png", (WIDTH, HEIGHT))
+background_image = load_image("Backgrounds/forest.png", (SCREEN_WIDTH, SCREEN_HEIGHT))
 player_image = load_image("squirtle.png", (500, 500))
 opponent_image = load_image("squirtle.png", (250, 250))
 
@@ -108,7 +109,7 @@ while True:
     # display_typing_text(screen, TEXT["NEW_OPPONENT"], 50, 100)  # 100ms delay
 
     # Draw Pokémon images
-    screen.blit(player_image, (WIDTH // 16, HEIGHT // 2))
+    screen.blit(player_image, (SCREEN_WIDTH // 16, SCREEN_HEIGHT // 2))
     screen.blit(opponent_image, (500, 260))
 
     # Draw health bars
