@@ -44,6 +44,8 @@ Defeat wild Pokémon and keep your starter Pokémon healthy.
 
 ## Next Steps
 
+- [ ] add stats and info to pokedex & manage pokemon screens
+
 ### Upcoming Features
 
 - [ ] evolution
