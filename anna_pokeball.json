@@ -1,0 +1,37 @@
+{
+    "pokeball": [
+        {
+            "name": "pikachu",
+            "types": null,
+            "level": 9,
+            "hp": null,
+            "attack": null,
+            "defense": null,
+            "speed": null,
+            "evolution": null,
+            "available": true
+        },
+        {
+            "name": "bulbasaur",
+            "types": null,
+            "level": 9,
+            "hp": null,
+            "attack": null,
+            "defense": null,
+            "speed": null,
+            "evolution": null,
+            "available": true
+        },
+        {
+            "name": "squirtle",
+            "types": null,
+            "level": 10,
+            "hp": null,
+            "attack": null,
+            "defense": null,
+            "speed": null,
+            "evolution": null,
+            "available": true
+        }
+    ]
+}

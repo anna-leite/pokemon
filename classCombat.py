@@ -89,7 +89,7 @@ class Combat():
             experience_range = (201, 351)
 
         # 3. Charger les Pokémon du fichier pokédex.json qui ont une base_experience dans la plage
-        with open('pokemon/pokedex.json', 'r') as f:
+        with open('pokedex.json', 'r') as f:
                 data = json.load(f)
                 pokedex_data = data.get("pokemon", [])
         filtered_pokemons = [

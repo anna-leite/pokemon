@@ -10,7 +10,7 @@ from classManagePokemons import managePokemon
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 FPS = 60
-FONT_PATH = "pokemon/Assets/Fonts/Oxanium-Regular.ttf"
+FONT_PATH = "Assets/Fonts/Oxanium-Regular.ttf"
 COLOURS = {
     "BLACK": (0, 0, 0),
     "DARK_GREY": (68, 68, 68),
@@ -73,14 +73,14 @@ def draw_pre_battle():
     }
 
     clock = pygame.time.Clock()
-    background_image = pygame.image.load("pokemon/Assets/Images/Backgrounds/forest.png")
+    background_image = pygame.image.load("Assets/Images/Backgrounds/forest.png")
     
     combat = Combat(player)
     pokeball = managePokemon(player)
     fighting_team = pokeball.fighting_pokemons()
     combat.get_player_pokemon("pikachu")
     random_pokemon = combat.generate_random_pokemon(fighting_team)
-    random_pokemon_image = pygame.image.load(f"pokemon/Assets/Images/Pokemon/{random_pokemon.get_name()}_front.png")
+    random_pokemon_image = pygame.image.load(f"Assets/Images/Pokemon/{random_pokemon.get_name()}_front.png")
     
 
     while True:
@@ -109,7 +109,7 @@ def draw_pre_battle():
         y_offset = 300
         for i, pokemon in enumerate(fighting_team):
             # Pokémon image
-            pokemon_image = pygame.image.load(f"pokemon/Assets/Images/Pokemon/{pokemon}_front.png")
+            pokemon_image = pygame.image.load(f"Assets/Images/Pokemon/{pokemon}_front.png")
             screen.blit(pokemon_image, (100, y_offset + (i * 100)))
 
             # Pokémon name
