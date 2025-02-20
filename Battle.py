@@ -1,14 +1,16 @@
 import pygame
 import sys
 import json
+import random
+from classPokemon import Pokemon
+from classCombat import Combat
+from classManagePokemons import managePokemon
 
 # Constants
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 FPS = 60
-MAX_HEALTH = 100
-FONT_PATH = "Assets/Fonts/Oxanium-Regular.ttf"
-
+FONT_PATH = "pokemon/Assets/Fonts/Oxanium-Regular.ttf"
 COLOURS = {
     "BLACK": (0, 0, 0),
     "DARK_GREY": (68, 68, 68),
@@ -18,71 +20,57 @@ COLOURS = {
     "LIGHT_GREY": (200, 200, 200, 10)
 }
 
-TEXT = {
-    "ATTACK": f"your attack does {damage} damage",
-    "DEFENSE": f"you defend with {defense}, you take {damage} damage",
-}
-
 FONT_SIZE = 28
 BOX_PADDING = 5
 
-# variables
-player_pokemon = ""
-random_pokemon = ""
-damage = "damage"
-defense = "defense"
-level = "level"
+
+
+pygame.init()
+font = pygame.font.Font(FONT_PATH, 36)
 
 # Set up the display
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Battle!")
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Battle")
 
-# Initialize Pygame
-pygame.init()
+player = "anna"
+random_pokemon = Pokemon("pikachu")
+player_pokemon = Pokemon("pikachu")
+pokeball = managePokemon(player)
+
 
 # Function to draw the text box
 def draw_text_box(text, x, y):
-    # Split the text into lines
     words = text.split(' ')
     current_line = ""
     lines = []
     
     for word in words:
-        # Check if adding the next word exceeds the width
         test_line = current_line + word + ' '
-        text_surface = font.render(test_line, True, COLOURS["COLOURS["WHITE"]"])
-        if text_surface.get_width() > WIDTH - 40:  # 20 padding on each side
+        text_surface = font.render(test_line, True, COLOURS["WHITE"])
+        if text_surface.get_width() > SCREEN_WIDTH - 40:
             lines.append(current_line)
             current_line = word + ' '
         else:
             current_line = test_line
             
-    # Add the last line if it exists
     if current_line:
         lines.append(current_line)
 
-    # Calculate the box size based on the number of lines
-    text_box_width = max(font.render(line, True, COLOURS["COLOURS["WHITE"]"]).get_width() for line in lines) + BOX_PADDING * 2
+    text_box_width = max(font.render(line, True, COLOURS["WHITE"]).get_width() for line in lines) + BOX_PADDING * 2
     text_box_height = len(lines) * (FONT_SIZE + BOX_PADDING) + BOX_PADDING
 
-    # Create a surface for the box with transparency
     box_surface = pygame.Surface((text_box_width, text_box_height), pygame.SRCALPHA)
-    box_surface.fill(COLOURS["GREY"])
+    box_surface.fill(COLOURS["DARK_GREY"])
 
-    # Draw the box
     pygame.draw.rect(box_surface, COLOURS["WHITE"], (0, 0, text_box_width, text_box_height), 2)
 
-    # Blit the box and text onto the screen
     screen.blit(box_surface, (x, y))
     
-    # Draw each line of text
     for i, line in enumerate(lines):
         text_surface = font.render(line, True, COLOURS["WHITE"])
         screen.blit(text_surface, (x + BOX_PADDING, y + BOX_PADDING + i * (FONT_SIZE + BOX_PADDING)))
 
-# Health variables
-player_health = MAX_HEALTH
-opponent_health = MAX_HEALTH
+
 
 font = pygame.font.Font(FONT_PATH, 36)
 
@@ -114,11 +102,22 @@ def load_image(path, size):
     image = pygame.image.load(path)
     return pygame.transform.scale(image, size)
 
+
+
 def draw_battle(self):
+        combat = Combat(player, player_pokemon) # attention à ouvrir dans 
         clock = pygame.time.Clock()
         background_image = load_image("Backgrounds/forest.png", (SCREEN_WIDTH, SCREEN_HEIGHT))
-        player_image = load_image("{player_pokemon_name}.png", (500, 500))
-        opponent_image = load_image("{random_pokemon_name}.png", (250, 250))
+        player_pokemon_image = load_image(f"{player_pokemon.get_name()}_back.png", (500, 500))
+        random_pokemon_image = load_image(f"{random_pokemon.get_name()}_front.png", (250, 250))
+        TEXT = {
+        "ATTACK": f"{attacker.get_name()} does {attacker_damage} damage",
+        "DEFENSE": f"{defender.get_name()} defends with {defender.get_defense()}, it takes {attacker_damage} damage",
+    }
+        # Health variables
+        player_max_health = player_pokemon.get_hp()
+        random_max_health = random_pokemon.get_hp()
+
 
         while True:
             for event in pygame.event.get():
@@ -126,23 +125,42 @@ def draw_battle(self):
                     pygame.quit()
                     sys.exit()
 
-            # Update health
-            player_health = max(0, player_health - 0.05)
-            opponent_health = max(0, opponent_health - 0.03)
+
 
             # Draw background
             screen.blit(background_image, (0, 0))
-            
-            # # Display the text
-            # display_typing_text(screen, TEXT["NEW_OPPONENT"], 50, 100)  # 100ms delay
+
+            attacker, defender = combat.attacks_first()
+
+            while player_pokemon.is_alive() and random_pokemon.is_alive():
+                attacker_damage = combat.calculate_damage()
+                combat.perform_attack()
+                draw_text_box(TEXT['ATTACK'], SCREEN_WIDTH // 2 - 150, SCREEN_HEIGHT - 150)
+                draw_text_box(TEXT['DEFENSE'], SCREEN_WIDTH // 2 - 150, SCREEN_HEIGHT - 150)
+
+                draw_health_bar(screen, 400, 500, player_pokemon.get_hp(), player_max_health, f"{player_pokemon.get_name()}", 1, 400)
+                draw_health_bar(screen, 300, 300, random_pokemon.get_hp(), random_max_health, f"{random_pokemon.get_name()}", 1, 200)
+
+                if not defender.is_alive():
+                    winner = attacker
+                    if winner == player_pokemon :
+                        winner.level_up()
+                        winner.evolve()
+                        pokeball.add_pokemon(random_pokemon)
+                        # win screen
+                    elif winner == random_pokemon :
+                        pokeball.remove_pokemon(player_pokemon)
+                        # game over screen
+                    
+                attacker, defender = defender, attacker
+
 
             # Draw Pokémon images
-            screen.blit(player_image, (SCREEN_WIDTH // 16, SCREEN_HEIGHT // 2))
-            screen.blit(opponent_image, (500, 260))
+            screen.blit(player_pokemon_image, (SCREEN_WIDTH // 16, SCREEN_HEIGHT // 2))
+            screen.blit(random_pokemon_image, (500, 260))
 
-            # Draw health bars
-            draw_health_bar(screen, 400, 500, player_health, MAX_HEALTH, "Player", 1, 400)
-            draw_health_bar(screen, 300, 300, opponent_health, MAX_HEALTH, "Opponent", 1, 200)
+
+
 
             # Update the display
             pygame.display.flip()
