@@ -33,9 +33,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Battle")
 
 player = "anna"
-random_pokemon = Pokemon("pikachu")
-player_pokemon = Pokemon("pikachu")
-pokeball = managePokemon(player)
+
 
 
 # Function to draw the text box
@@ -104,19 +102,21 @@ def load_image(path, size):
 
 
 
-def draw_battle(self):
-        combat = Combat(player, player_pokemon) # attention à ouvrir dans 
+def draw_battle():
+        combat = Combat(player) 
+        pokeball = managePokemon(player)
+        fighting_team = pokeball.fighting_pokemons()
+        combat.get_player_pokemon("pikachu")
+        combat.generate_random_pokemon(fighting_team)
         clock = pygame.time.Clock()
-        background_image = load_image("Backgrounds/forest.png", (SCREEN_WIDTH, SCREEN_HEIGHT))
-        player_pokemon_image = load_image(f"{player_pokemon.get_name()}_back.png", (500, 500))
-        random_pokemon_image = load_image(f"{random_pokemon.get_name()}_front.png", (250, 250))
-        TEXT = {
-        "ATTACK": f"{attacker.get_name()} does {attacker_damage} damage",
-        "DEFENSE": f"{defender.get_name()} defends with {defender.get_defense()}, it takes {attacker_damage} damage",
-    }
+
+        background_image = load_image("pokemon/Assets/Images/Backgrounds/forest.png", (SCREEN_WIDTH, SCREEN_HEIGHT))
+        player_pokemon_image = load_image(f"pokemon/Assets/Images/Pokemon/{combat.player_pokemon.get_name()}_back.png", (500, 500))
+        random_pokemon_image = load_image(f"pokemon/Assets/Images/Pokemon/{combat.random_pokemon.get_name()}_front.png", (250, 250))
+
         # Health variables
-        player_max_health = player_pokemon.get_hp()
-        random_max_health = random_pokemon.get_hp()
+        player_max_health = combat.player_pokemon.get_hp()
+        random_max_health = combat.random_pokemon.get_hp()
 
 
         while True:
@@ -132,24 +132,29 @@ def draw_battle(self):
 
             attacker, defender = combat.attacks_first()
 
-            while player_pokemon.is_alive() and random_pokemon.is_alive():
-                attacker_damage = combat.calculate_damage()
-                combat.perform_attack()
+
+            while combat.player_pokemon.is_alive() and combat.random_pokemon.is_alive():
+                attacker_damage = combat.calculate_damage(attacker, defender)
+                combat.perform_attack(attacker, defender)
+                TEXT = {
+        "ATTACK": f"{attacker.get_name()} does {attacker_damage} damage",
+        "DEFENSE": f"{defender.get_name()} defends with {defender.get_defense()}, it takes {attacker_damage} damage",
+    }
                 draw_text_box(TEXT['ATTACK'], SCREEN_WIDTH // 2 - 150, SCREEN_HEIGHT - 150)
                 draw_text_box(TEXT['DEFENSE'], SCREEN_WIDTH // 2 - 150, SCREEN_HEIGHT - 150)
 
-                draw_health_bar(screen, 400, 500, player_pokemon.get_hp(), player_max_health, f"{player_pokemon.get_name()}", 1, 400)
-                draw_health_bar(screen, 300, 300, random_pokemon.get_hp(), random_max_health, f"{random_pokemon.get_name()}", 1, 200)
+                draw_health_bar(screen, 400, 500, combat.player_pokemon.get_hp(), player_max_health, f"{combat.player_pokemon.get_name()}", 1, 400)
+                draw_health_bar(screen, 300, 300, combat.random_pokemon.get_hp(), random_max_health, f"{combat.random_pokemon.get_name()}", 1, 200)
 
                 if not defender.is_alive():
                     winner = attacker
-                    if winner == player_pokemon :
+                    if winner == combat.player_pokemon :
                         winner.level_up()
                         winner.evolve()
-                        pokeball.add_pokemon(random_pokemon)
+                        pokeball.add_pokemon(combat.random_pokemon)
                         # win screen
-                    elif winner == random_pokemon :
-                        pokeball.remove_pokemon(player_pokemon)
+                    elif winner == combat.random_pokemon :
+                        pokeball.remove_pokemon(combat.player_pokemon)
                         # game over screen
                     
                 attacker, defender = defender, attacker
@@ -167,3 +172,5 @@ def draw_battle(self):
 
             # Cap the frame rate
             clock.tick(FPS)
+
+draw_battle()
