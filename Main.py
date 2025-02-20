@@ -23,9 +23,6 @@ COLOURS = {
     "LIGHT_GREY": (200, 200, 200, 10)
 }
 
-# POKEAPI_URL = "https://pokeapi.co/api/v2/pokemon/"
-
-
 def get_font_size(screen_width):
     return max(16, int(screen_width * 0.03))
 
