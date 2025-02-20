@@ -10,7 +10,7 @@ from classManagePokemons import managePokemon
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 FPS = 60
-FONT_PATH = "pokemon/Assets/Fonts/Oxanium-Regular.ttf"
+FONT_PATH = "Assets/Fonts/Oxanium-Regular.ttf"
 COLOURS = {
     "BLACK": (0, 0, 0),
     "DARK_GREY": (68, 68, 68),
@@ -110,9 +110,9 @@ def draw_battle():
         combat.generate_random_pokemon(fighting_team)
         clock = pygame.time.Clock()
 
-        background_image = load_image("pokemon/Assets/Images/Backgrounds/forest.png", (SCREEN_WIDTH, SCREEN_HEIGHT))
-        player_pokemon_image = load_image(f"pokemon/Assets/Images/Pokemon/{combat.player_pokemon.get_name()}_back.png", (500, 500))
-        random_pokemon_image = load_image(f"pokemon/Assets/Images/Pokemon/{combat.random_pokemon.get_name()}_front.png", (250, 250))
+        background_image = load_image("Assets/Images/Backgrounds/forest.png", (SCREEN_WIDTH, SCREEN_HEIGHT))
+        player_pokemon_image = load_image(f"Assets/Images/Pokemon/{combat.player_pokemon.get_name()}_back.png", (500, 500))
+        random_pokemon_image = load_image(f"Assets/Images/Pokemon/{combat.random_pokemon.get_name()}_front.png", (250, 250))
 
         # Health variables
         player_max_health = combat.player_pokemon.get_hp()
@@ -158,7 +158,6 @@ def draw_battle():
                         # game over screen
                     
                 attacker, defender = defender, attacker
-
 
             # Draw Pokémon images
             screen.blit(player_pokemon_image, (SCREEN_WIDTH // 16, SCREEN_HEIGHT // 2))

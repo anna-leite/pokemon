@@ -110,16 +110,16 @@ def draw_pre_battle():
         for i, pokemon in enumerate(fighting_team):
             # Pokémon image
             pokemon_image = pygame.image.load(f"Assets/Images/Pokemon/{pokemon}_front.png")
-            screen.blit(pokemon_image, (100, y_offset + (i * 100)))
+            screen.blit(pokemon_image, ((SCREEN_WIDTH * 0.2 + (i * 180)), (SCREEN_HEIGHT * 0.7 - 100)))
 
             # Pokémon name
             pokemon_name = font.render(pokemon, True, COLOURS['BLACK'])
-            screen.blit(pokemon_name, (200, y_offset + (i * 100)))
+            screen.blit(pokemon_name, ((SCREEN_WIDTH * 0.2 + (i * 180)), (SCREEN_HEIGHT * 0.7 - 50)))
 
             # Pokémon types
             pokemon_types_text = " / ".join(Pokemon(pokemon).get_types()) if Pokemon(pokemon).get_types() else "Unknown"
             pokemon_types = font.render(pokemon_types_text, True, COLOURS['BLACK'])
-            screen.blit(pokemon_types, (200, y_offset + (i * 100) + 30))
+            screen.blit(pokemon_types, ((SCREEN_WIDTH * 0.2 + (i * 180)), (SCREEN_HEIGHT * 0.7 - 25)))
 
         # Display instructions
         instructions = font.render(TEXT['SELECT'], True, COLOURS['BLACK'])
