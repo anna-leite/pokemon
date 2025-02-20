@@ -2,9 +2,6 @@ import sys
 import json
 import pygame
 import os
-from classPokemon import Pokemon
-from classCombat import Combat
-from classManagePokemons import managePokemon
 
 # Constants
 SCREEN_WIDTH = 800
@@ -98,7 +95,6 @@ def render_pokemon(pokemon_data, index):
         return {"name": "not found :(", "id": "", "image": None, "not_found": True}
 
 # Global state.
-player = "anna"
 search_pokemon = 0
 pokemon_data = []
 selected_pokemon_images = [None, None, None]  # To hold selected Pokémon images
@@ -117,7 +113,7 @@ info_font = pygame.font.Font(FONT, 30)
 clock = pygame.time.Clock()
 
 # Load Pokémon data from the JSON file
-pokeball_file = f"{player}_pokeball.json"  # change to {player_name}_pokeball.json later on
+pokeball_file = "pokedex.json"  # change to {player_name}_pokeball.json later on
 pokemon_data = load_pokemon_data(pokeball_file)
 
 # Render the first Pokémon.
