@@ -51,7 +51,7 @@ class Pokemon:
 
     def get_pokemon_info(self, name, info):
         try:
-            with open('pokemon/pokedex.json', 'r') as f :
+            with open('pokedex.json', 'r') as f :
                 data = json.load(f)
                 pokemon_data = data.get("pokemon", [])
 
