@@ -1,7 +1,7 @@
 import sys
-import requests
+import json
 import pygame
-
+import os
 
 # Constants
 SCREEN_WIDTH = 800
@@ -10,13 +10,10 @@ FONT = "Assets/Fonts/Oxanium-Regular.ttf"
 BLACK = (0, 0, 0)
 DARK_GREY = (68, 68, 68)
 WHITE = (255, 255, 255)
-POKEAPI_URL = "https://pokeapi.co/api/v2/pokemon/"
 FPS = 60
-
 
 def get_font_size(screen_width):
     return max(16, int(screen_width * 0.03))
-
 
 # Custom Button
 class Button:
@@ -60,8 +57,7 @@ class Button:
                     return True
         return False
 
-
-# draw a vertical gradient background.
+# Draw a vertical gradient background.
 def draw_vertical_gradient(surface, top_color, bottom_color):
     height = surface.get_height()
     for y in range(height):
@@ -71,54 +67,36 @@ def draw_vertical_gradient(surface, top_color, bottom_color):
         b = top_color[2] + (bottom_color[2] - top_color[2]) * ratio
         pygame.draw.line(surface, (int(r), int(g), int(b)), (0, y), (surface.get_width(), y))
 
+# Load Pokémon data from JSON file
+def load_pokemon_data(filename):
+    with open(filename, 'r') as f:
+        data = json.load(f)
+        return data["pokemon"]  # Return the list of Pokémon
 
-# API logic (synchronous fetching)
-def fetch_pokemon(pokemon):
-    url = f"{POKEAPI_URL}{pokemon}"
-    try:
-        response = requests.get(url)
-        if response.status_code == 200:
-            return response.json()
-    except Exception as e:
-        print("Error fetching data:", e)
-    return None
+def load_pokemon_image(name):
+    image_path = f"Assets/Images/Pokemon/{name}_front.png"
+    if os.path.exists(image_path):
+        return pygame.image.load(image_path).convert_alpha()
+    else:
+        print(f"Image not found: {image_path}")
+        return None
 
-def render_pokemon(pokemon_identifier):
-    data = fetch_pokemon(pokemon_identifier)
-    if data:
-        # Get the animated sprite URL.
-        sprite_url = (data.get("sprites", {})
-                        .get("versions", {})
-                        .get("generation-v", {})
-                        .get("black-white", {})
-                        .get("animated", {})
-                        .get("front_default", None))
-        if sprite_url:
-            try:
-                image_resp = requests.get(sprite_url)
-                image_bytes = image_resp.content
-                temp_filename = "temp_pokemon.png"
-                with open(temp_filename, "wb") as f:
-                    f.write(image_bytes)
-                image = pygame.image.load(temp_filename).convert_alpha()
-            except Exception as e:
-                print("Error loading image:", e)
-                image = None
-        else:
-            image = None
-        return {"name": data["name"], "id": data["id"], "image": image, "not_found": False}
+def render_pokemon(pokemon_data, index):
+    if 0 <= index < len(pokemon_data):
+        pokemon = pokemon_data[index]
+        image = load_pokemon_image(pokemon["name"])
+        return {
+            "name": pokemon["name"],
+            "id": pokemon["id"],
+            "image": image,
+            "not_found": False
+        }
     else:
         return {"name": "not found :(", "id": "", "image": None, "not_found": True}
 
-
 # Global state.
-search_pokemon = 1
-pokemon_data = {
-    "name": "",
-    "id": "",
-    "image": None,
-    "not_found": False
-}
+search_pokemon = 0
+pokemon_data = []
 
 # Initialize pygame and create the window.
 pygame.init()
@@ -140,14 +118,17 @@ placeholder_image.fill((255, 0, 0))
 info_font = pygame.font.Font(FONT, 30)
 clock = pygame.time.Clock()
 
+# Load Pokémon data from the JSON file
+pokedex_file = "pokedex.json"
+pokemon_data = load_pokemon_data(pokedex_file)
+
+# Render the first Pokémon.
+pokemon_display_data = render_pokemon(pokemon_data, search_pokemon)
 
 # Create buttons.
 prev_button = Button("< Previous", (SCREEN_WIDTH * 0.375, SCREEN_HEIGHT * 0.9), SCREEN_WIDTH)
 next_button = Button("Next >", (SCREEN_WIDTH * 0.58, SCREEN_HEIGHT * 0.9), SCREEN_WIDTH)
-
-# Render the first Pokémon.
-pokemon_data = render_pokemon(search_pokemon)
-
+back_button = Button("Back to Menu", (SCREEN_WIDTH * 0.90, SCREEN_HEIGHT * 0.1), SCREEN_WIDTH)
 
 # Main loop.
 running = True
@@ -158,36 +139,38 @@ while running:
 
         # Check button events.
         if prev_button.handle_event(event):
-            if search_pokemon > 1:
+            if search_pokemon > 0:
                 search_pokemon -= 1
-                pokemon_data = render_pokemon(search_pokemon)
+                pokemon_display_data = render_pokemon(pokemon_data, search_pokemon)
         if next_button.handle_event(event):
-            search_pokemon += 1
-            pokemon_data = render_pokemon(search_pokemon)
+            if search_pokemon < len(pokemon_data) - 1:
+                search_pokemon += 1
+                pokemon_display_data = render_pokemon(pokemon_data, search_pokemon)
+        if back_button.handle_event(event):
+            handle_events.state = "menu" # fix this when added to main.py
 
     draw_vertical_gradient(window, (106, 183, 245), (107, 220, 69))
     window.blit(pokedex_image, pokedex_rect)
 
     # Display Pokémon image.
-    if pokemon_data["image"]:
-        img = pokemon_data["image"]
-        # Double the size of the Pokémon image.
+    if pokemon_display_data["image"]:
+        img = pokemon_display_data["image"]
         width, height = img.get_size()
         scaled_img = pygame.transform.scale(img, (width * 1.6, height * 1.6))
-        # Adjust the image rectangle to center the scaled image.
         img_rect = scaled_img.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
         window.blit(scaled_img, img_rect)
     else:
         window.blit(placeholder_image, placeholder_image.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)))
 
     # Render Pokémon information text.
-    display_text = f"{pokemon_data.get('id', '')} - {pokemon_data.get('name', '')}"
+    display_text = f"{pokemon_display_data.get('id', '')} - {pokemon_display_data.get('name', '')}"
     text_surface = info_font.render(display_text, True, (170, 170, 170))
     text_rect = text_surface.get_rect(center=(SCREEN_WIDTH // 2, int(SCREEN_HEIGHT // 1.5)))
     window.blit(text_surface, text_rect)
 
     prev_button.draw(window)
     next_button.draw(window)
+    back_button.draw(window)
 
     pygame.display.update()
     clock.tick(FPS)
